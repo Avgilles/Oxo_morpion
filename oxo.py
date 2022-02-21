@@ -4,14 +4,17 @@ import numpy as np
 class Board:
     def __init__(self, size_array=9):
         self.sizeArray = size_array
+        self.boardArray = self.createdBoard()
 
     def __str__(self):
         res = ""
-        line_board = np.array_split(self.createdBoard(), 3)
+        line_board = np.array_split(self.boardArray, 3)
         for line in line_board:
             res += f"\n -------------  \n"
+            col = 0
             for column in line:
-                res += f" | {column}" if column == 0 else str(column.value) + "|"
+                res += f" | {column} |" if col == 0 else f" {column} |"
+                col = col + 1
 
         return res
 
@@ -33,17 +36,20 @@ class Board:
         line_board = np.array_split(board, 3)
         data = {"line_board": line_board, "board": board }
         '''
-        return board
+        self.boardArray = board
+        return self.boardArray
 
 
 def check_inputs(this_input, array=[]):
-    array.append(this_input)
     correct = True
     if this_input > 9:
         correct = False
     else:
-        for i in array:
-            print(i)
+        if this_input not in array:
+            array.append(this_input)
+        else:
+            correct = False
+
     print(array)
     return correct
 
@@ -76,6 +82,7 @@ class Oxo:
         win = False
         i = 0
         white_board = self.board.createdBoard()
+        print_the_board = self.board
         print(f"whiteboard : {white_board}")
         while i < 9 or win:
             try:
@@ -84,23 +91,31 @@ class Oxo:
 
                     if i % 2:
                         print(f'{self.player2} a joué a la case {input_move}')
-                        self.board = addPoint(white_board, input_move, 1)
+                        addPoint(white_board, input_move, 1)
+                        print(print_the_board)
                     else:
                         print(f'{self.player1} a joué a la case {input_move}')
-                        self.board = addPoint(white_board, input_move, 2)
+                        addPoint(white_board, input_move, 2)
+                        print(print_the_board)
 
                     i = i + 1
                     # print(input_move)
-                    # print(f"whiteboard : {white_board}")
+                    print(f"whiteboard : {white_board}")
+
                     print(self.__str__())
                 else:
-                    print("Please use a number between 0-9")
+                    print("Please choose a number between 0-9 and a case not used")
 
             except ValueError:
                 print("Please only input digits")
 
+        print(self.__str__())
+
 
 if __name__ == "__main__":
     exe = Oxo("gilles", "susu")
+    help(exe)
+    # print(dir(exe))
+    # print(Oxo.__dict__)
     print(exe)
     exe.role()
