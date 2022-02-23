@@ -7,6 +7,8 @@ class Board:
         self.boardArray = self.createdBoard()
 
     def __str__(self):
+        self.check_win()
+
         res = ""
         line_board = np.array_split(self.boardArray, 3)
         for line in line_board:
@@ -20,7 +22,6 @@ class Board:
 
     def createdBoard(self):
         board = []
-        diagonal_list = [[], []]
         # print(int(self.sizeArray/3))
         for i in range(0, int(self.sizeArray)):
             '''
@@ -39,19 +40,28 @@ class Board:
         self.boardArray = board
         return self.boardArray
 
+    def check_win(self):
+        line_board = np.array_split(self.boardArray, 3)
+        print(f"{line_board}")
 
-def check_inputs(this_input, array=[]):
-    correct = True
-    if this_input > 9:
-        correct = False
-    else:
-        if this_input not in array:
-            array.append(this_input)
-        else:
-            correct = False
+        """ horizontal """
+        horizontal_board = []
+        diagonal_list = [[], []]
 
-    print(array)
-    return correct
+        for i in range(0, len(self.boardArray)):
+
+            if i % 2 == 0:
+                a = i + 2
+                diagonal_list[0].append(i)
+                diagonal_list[1].append(a)
+            print(f"diagonal :{diagonal_list}")
+
+            """
+            h_b = []
+            if i % 3 == 0:
+                print(i)
+                h_b[0].append()
+            """
 
 
 def addPoint(board, num, player):
@@ -70,11 +80,25 @@ FUNC_DICT = {
 class Oxo:
     def __init__(self, player1, player2):
         self.board = Board()
+        # self.length_board = Board().__init__()
         self.player1 = player1
         self.player2 = player2
 
     def __str__(self):
-        return f"{self.player1} vs {self.player2} \n {self.board}"
+        return f"{self.player1} vs {self.player2} \n {self.board} \n"
+
+    def check_inputs(self, this_input, array=[]):
+        correct = True
+        if this_input > 8:
+            correct = False
+        else:
+            if this_input not in array:
+                array.append(this_input)
+            else:
+                correct = False
+
+        print(array)
+        return correct
 
     def role(self):
         print("chose your case")
@@ -83,11 +107,11 @@ class Oxo:
         i = 0
         white_board = self.board.createdBoard()
         print_the_board = self.board
-        print(f"whiteboard : {white_board}")
-        while i < 9 or win:
+        # print(f"whiteboard : {white_board}")
+        while i < 8 or win:
             try:
                 input_move = int(input())
-                if check_inputs(input_move, all_input_move):
+                if self.check_inputs(input_move, all_input_move):
 
                     if i % 2:
                         print(f'{self.player2} a joué a la case {input_move}')
@@ -100,7 +124,7 @@ class Oxo:
 
                     i = i + 1
                     # print(input_move)
-                    print(f"whiteboard : {white_board}")
+                    # print(f"whiteboard : {white_board}")
 
                     print(self.__str__())
                 else:
@@ -114,7 +138,7 @@ class Oxo:
 
 if __name__ == "__main__":
     exe = Oxo("gilles", "susu")
-    help(exe)
+    # help(exe)
     # print(dir(exe))
     # print(Oxo.__dict__)
     print(exe)
