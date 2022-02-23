@@ -7,8 +7,13 @@ import random
 class Board:
     def __init__(self, height: int, width: int):
         self.__board = [[None for w in range(width)] for h in range(height)]
+        self.counter = 0
         # self.width = width
         # self.height = height
+
+    @property
+    def full(self):
+        return self.counter == 9
 
     # @property
     # def board(self):
@@ -35,6 +40,7 @@ class Board:
     def add(self, pos: tuple, number):
         self.lastAddPosition = pos
         self.__board[pos[0]][pos[1]] = number
+        self.counter += 1
 
     def winned(self):
         # Horizontal
@@ -104,7 +110,7 @@ if __name__ == "__main__":
 
     game.currentPlayer = random.choice([0, 1])
 
-    while not game.finished:
+    while not game.finished or not game.full:
         print(game)
         # game.play(PLAYER_TURN[str(game.currentPlayer)]())
         print(f"game.currentPlayer = {game.currentPlayer}")
